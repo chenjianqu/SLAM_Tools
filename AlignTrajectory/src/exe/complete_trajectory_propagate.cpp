@@ -92,8 +92,6 @@ int main(int argc, char *argv[]) {
         output_poses.push_back(propa_pose);
     }
 
-
-
     ///将VINS时间戳开始前的OP位姿放进输出的数组
     vector<PoseStamped> poses_all;
     poses_all.reserve(op_poses.size());

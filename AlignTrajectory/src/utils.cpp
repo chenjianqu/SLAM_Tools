@@ -45,6 +45,30 @@ void WritePosesToTxt(const std::string& txt_path,const std::vector<PoseStamped> 
     fout.close();
 }
 
+
+void WritePosesToTxtComma(const std::string& txt_path,const std::vector<PoseStamped> &poses){
+    std::ofstream fout(txt_path);
+    for(auto &pose:poses){
+        fout<<fmt::format(
+                "{},{},{},{},{},{},{},{}",
+                pose.time_stamp(),pose.t().x(),pose.t().y(),pose.t().z(),
+                pose.q().x(),pose.q().y(),pose.q().z(),pose.q().w()) <<std::endl;
+    }
+    fout.close();
+}
+
+
+void WriteOnePoseToTxt(const std::string& txt_path,const Pose *pose){
+    std::ofstream fout(txt_path);
+    fout<<fmt::format(
+            "{} {} {} {} {} {} {} {}",
+            0,pose->t().x(),pose->t().y(),pose->t().z(),
+            pose->q().x(),pose->q().y(),pose->q().z(),pose->q().w()) <<std::endl;
+    fout.close();
+
+}
+
+
 vector<double> StringLineToVector(const string& line){
     vector<string> tokens;
     if(line.find(',') != string::npos){

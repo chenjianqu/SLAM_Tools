@@ -5,6 +5,9 @@ set(CMAKE_CXX_STANDARD 17)
 
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 
+
+add_definitions(-DSPDLOG_FMT_EXTERNAL)
+
 find_package(Eigen3 REQUIRED)
 include_directories(${EIGEN3_INCLUDE_DIRS})
 
@@ -20,23 +23,22 @@ include_directories(${GLOG_INCLUDE_DIRS})
 find_package(Sophus REQUIRED)
 include_directories(${Sophus_INCLUDE_DIRS})
 
+find_package(calib_manager REQUIRED)
+include_directories(${calib_manager_INCLUDE_DIRS})
+
 find_package(Ceres REQUIRED)
 include_directories(${Ceres_INCLUDE_DIRS})
-
-FIND_PACKAGE( OpenMP REQUIRED)
-if(OPENMP_FOUND)
-    message("OPENMP FOUND")
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
-endif()
 
 set(THIRTY_LIBS
         ${GFLAGS_LIBRARIES}
         -lglog
+        fmt
         ${spdlog_LIBRARIES}
         ${OpenCV_LIBRARIES}
+        calib_manager
         ${Sophus_LIBRARIES}
-        ${CERES_LIBRARIES}
+        ${Ceres_LIBRARIES}
+        -lceres
         )
 
 include_directories(src)
@@ -48,10 +50,13 @@ add_executable(rotate_poses src/exe/rotate_poses.cpp src/utils.cpp)
 target_link_libraries(rotate_poses ${THIRTY_LIBS})
 
 add_executable(complete_trajectory src/exe/complete_trajectory.cpp src/utils.cpp  src/factor/pose_factor.cpp
-        src/factor/eigenquaternion_localparameterization.h
-        src/factor/eigenquaternion_localparameterization.cpp
-        src/factor/math_util.hpp)
-target_link_libraries(complete_trajectory ${THIRTY_LIBS} )
+        src/factor/local_parameterization.h
+        src/factor/local_parameterization.cpp
+        src/factor/math_util.hpp
+        src/optimize.cpp
+        src/pose.cpp
+        )
+target_link_libraries(complete_trajectory ${THIRTY_LIBS})
 
 add_executable(complete_trajectory_propagate src/exe/complete_trajectory_propagate.cpp src/utils.cpp
         src/factor/math_util.hpp )

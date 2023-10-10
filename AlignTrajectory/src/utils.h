@@ -26,6 +26,11 @@ std::vector<PoseStamped> ReadPosesFromTxt(const std::string& txt_path);
 
 void WritePosesToTxt(const std::string& txt_path,const std::vector<PoseStamped> &poses);
 
+void WritePosesToTxtComma(const std::string& txt_path,const std::vector<PoseStamped> &poses);
+
+
+void WriteOnePoseToTxt(const std::string& txt_path,const Pose *pose);
+
 vector<double> StringLineToVector(const string& line);
 
 

@@ -34,8 +34,8 @@ int main(int argc, char *argv[]) {
     Eigen::Quaterniond rotation_q(rotation_m);
 
     for(auto& est:est_poses){
-        est.q = rotation_q * est.q;
-        est.t = rotation_q * est.t;
+        est.q() = rotation_q * est.q();
+        est.t() = rotation_q * est.t();
     }
 
     WritePosesToTxt("output_poses_rotated.txt",est_poses);
